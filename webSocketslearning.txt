@@ -1,0 +1,50 @@
+Web Sockets:
+------------
+
+
+first we have to how http protocal is working
+when ever a request is raised by the client to the server,
+an http connection got created and then the response for the server
+will reach the client and reaching the response connection will
+automatically closed.....
+http protocal is unidirectional.
+
+
+
+coming to web sockets they are bidirectional and
+the connection will exits either any one client or server
+get diconnected example are chat applications
+
+ws://www.google.com
+wss://www.google.com
+
+whenever you see the url is in this form you have
+to know that they are using web sockets
+
+handshaking starts the websocket connection
+
+
+in chat and trading applications where we want
+to get the updated data then definetly you required
+the web Sockets
+
+
+where we can't use websockets means whenever you
+are fetching old data that is already there and
+you dont want the updated data then only you
+can't use websockets
+
+
+websoket with spring boot
+
+
+we have to add websocket dependecy for 
+creating websocket in springboot application.
+
+
+
+
+
+
+
+

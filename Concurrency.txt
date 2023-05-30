@@ -1,0 +1,16 @@
+Thread:
+-------
+A thread is a unit of execution within a process. each process can
+have multiple threads. in java every process or application has at least one thread
+
+creating a thread doesn't require as many resources as creating
+a process. Every thread created by a process shares the process's
+memory and files.
+
+each thread has what's called a thread stack, which is the memory
+that only that thread can access.
+
+so every java applications runs as a single process, and each
+process can have mutiple threads. every process has a heap and 
+every thread has a thread stack.
+

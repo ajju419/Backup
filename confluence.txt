@@ -1,0 +1,93 @@
+confluence api is provided by atlassian
+
+we can perform create, retrieve, delete and update operations on
+confluence tool pages, spaces commetns users and more
+
+it supports json, xml, and html
+
+
+step1:
+-------
+to create a dependency in pom.xml file 
+
+<dependency>
+    <groupId>com.atlassian.confluence</groupId>
+    <artifactId>confluence-rest-client</artifactId>
+    <version>{version}</version>
+</dependency>
+
+step2:
+Create a Confluence API client bean that will be used 
+to make REST API calls to the Confluence server. Here's 
+an example of how to create a bean using the 
+RestClientFactory class:
+
+import com.atlassian.confluence.rest.client.RestClientFactory;
+import com.atlassian.confluence.rest.client.authentication.AuthenticatedWebResourceProvider;
+import com.atlassian.sal.api.auth.LoginUriProvider;
+
+import javax.inject.Inject;
+import javax.ws.rs.core.UriBuilder;
+import java.net.URI;
+
+public class ConfluenceApiClient {
+    
+    private final AuthenticatedWebResourceProvider resourceProvider;
+
+    @Inject
+    public ConfluenceApiClient(LoginUriProvider loginUriProvider) {
+        URI baseUri = UriBuilder.fromUri("https://example.com").build(); // Replace with your Confluence server URL
+        resourceProvider = new RestClientFactory().createAuthenticatedResourceProvider(baseUri, new MyAuthenticator(loginUriProvider));
+    }
+
+    // Add methods to make REST API calls to Confluence server here
+
+    private static class MyAuthenticator implements RestClientFactory.Authenticator {
+
+        private final LoginUriProvider loginUriProvider;
+
+        public MyAuthenticator(LoginUriProvider loginUriProvider) {
+            this.loginUriProvider = loginUriProvider;
+        }
+
+        @Override
+        public boolean authenticate(AuthenticatedWebResourceProvider.Context context) {
+            // Implement your authentication logic here
+            return true;
+        }
+    }
+}
+
+
+
+
+https://ajaryya.atlassian.net/wiki/home
+
+
+
+controller
+----------
+
+import com.atlassian.confluence.rest.api.model.Space;
+import com.atlassian.confluence.rest.client.ConfluenceService;
+import com.atlassian.confluence.rest.client.SpaceService;
+
+import java.util.List;
+
+@RestController
+public class MyController {
+
+    private final ConfluenceService confluenceService;
+    private final SpaceService spaceService;
+
+    @Autowired
+    public MyController(ConfluenceApiClient confluenceApiClient) {
+        confluenceService = confluenceApiClient.resourceProvider().get(ConfluenceService.class);
+        spaceService = confluenceApiClient.resourceProvider().get(SpaceService.class);
+    }
+
+    @GetMapping("/spaces")
+    public List<Space> getSpaces() {
+        return spaceService.getSpaces().claim();
+    }
+}
